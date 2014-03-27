@@ -1,4 +1,6 @@
 var Console = (function () {
+	var Console = {};
+
 	var Colors = (function () {
 		var existingStyleSpanRegExp = /^<span style="([^"]+)">.+<\/span>$/,
 			styleSpanOpenRegExp = /^<span style="([^"]+)">/,
@@ -75,36 +77,25 @@ var Console = (function () {
 		};
 	})();
 
-	var Console = (function () {
+	var Logging = (function () {
 		var methodNames = ['log', 'group', 'groupEnd', 'groupCollapsed', 'warn', 'info'];
 
 		// browser compatibility
 		if (!window.console) {
-			var emptyFunc = function () {};
-
-			window.console = {};
-
-			methodNames.forEach(function (name) {
-				console[name] = emptyFunc;
-			});
-
-			return {
-				registerStyle: emptyFunc,
-				registerStyles: emptyFunc
-			};
+			window.console = {log: function () {}};
 		}
 
 		methodNames.forEach(function (name) {
-			var method = console[name];
+			var method = console['_' + name] = console[name] || console.log;
 
-			console[name] = function () {
+			console[name] = Console[name] = function () {
 				method.apply(console, Colors.argumentsToConsoleArguments(arguments));
 			};
 		});
 	})();
 
-	return {
-		registerStyle: Colors.registerStyle,
-		registerStyles: Colors.registerStyles
-	}
+	Console.registerStyle = Colors.registerStyle;
+	Console.registerStyles = Colors.registerStyles;
+
+	return Console;
 })();
