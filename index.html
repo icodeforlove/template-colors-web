@@ -17,7 +17,14 @@
 				orange: 'color:#ffa500'
 			});
 
-			console.log('hello '.grey + 'joe'.red + ' my name is '.grey + 'chad'.red);
+			console.log('hello '.blue + 'world'.red.underline);
+			console.group('group start (one style)'.red);
+			console.group('group start (' + 'multiple'.green + ' ' + 'styles'.blue + ')');
+			console.log('group log'.bold);
+			console.log('group log'.underline);
+			console.groupEnd();
+			console.groupEnd();
+			console.log('normal log');
 
 			// Everything (IE7...)
 			/*

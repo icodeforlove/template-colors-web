@@ -100,7 +100,7 @@ var Console = (function () {
 		function argumentsToConsoleArguments (args) {
 			var params = [];
 
-			Array.prototype.slice.call(args).forEach(function (arg) {
+			args.forEach(function (arg) {
 				if (typeof arg === 'string') {
 					params = params.concat(stringToFormatArray(arg));
 				} else {
@@ -120,11 +120,21 @@ var Console = (function () {
 	})();
 
 	var Logging = (function () {
-		var methodNames = ['log', 'group', 'groupEnd', 'groupCollapsed', 'warn', 'info'];
+		var methodNames = ['log', 'group', 'groupCollapsed', 'warn', 'info'],
+			groupLevel = 0;
 
 		// browser compatibility
 		if (!window.console) {
 			window.console = {log: function () {}};
+		}
+
+		var groupSupport = console.group;
+
+		// groupEnd not supported
+		if (!groupSupport) {
+			console.groupEnd = function () {
+				groupLevel--;
+			};
 		}
 
 		methodNames.forEach(function (name) {
@@ -135,15 +145,26 @@ var Console = (function () {
 					return;
 				}
 
-				// groups are not suppored
-				if (name === 'groupEnd' && console.log === method) {
-					return;
+				var args = Array.prototype.slice.call(arguments);
+
+				if (!groupSupport) {
+					if (name === 'group' || name === 'groupCollapsed') {
+						groupLevel++;
+					} else if (name === 'log') {
+						if (groupLevel) {
+							var groupPadding = '';
+							for (var i = 0; i < groupLevel; i++) {
+								groupPadding += '-';
+							}
+							args.splice(0, 0, groupPadding);
+						}
+					}
 				}
 
 				if (applySupport) {
-					method.apply(console, Colors.argumentsToConsoleArguments(arguments));
+					method.apply(console, Colors.argumentsToConsoleArguments(args));
 				} else {
-					var message = Colors.argumentsToConsoleArguments(arguments).join(' ');
+					var message = Colors.argumentsToConsoleArguments(args).join(' ');
 
 					if (message.match('<Console.js:INVALID_GETTER_ATTEMPT>')) {
 						if (!Console.legacySupport) {
