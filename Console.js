@@ -135,6 +135,11 @@ var Console = (function () {
 					return;
 				}
 
+				// groups are not suppored
+				if (name === 'groupEnd' && console.log === method) {
+					return;
+				}
+
 				if (applySupport) {
 					method.apply(console, Colors.argumentsToConsoleArguments(arguments));
 				} else {
