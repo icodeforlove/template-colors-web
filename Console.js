@@ -35,9 +35,9 @@ var Console = (function () {
 	function detectSupport () {
 		support.consoleApply = !browser.isIE || document.documentMode && document.documentMode > 9;
 		support.functionGetters = support.consoleApply;
-		support.consoleColors = !!window.chrome;
 		support.console = !!window.console;
 		support.modifiedConsole = !browser.isIE && support.console && console.log.toString().indexOf('apply') !== -1;
+		support.consoleColors = !!window.chrome || !!(browser.isFirefox && support.modifiedConsole);
 		support.consoleGroups = !!(window.console && console.group);
 
 		if (browser.isFirefox && !support.modifiedConsole) {

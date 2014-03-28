@@ -40,11 +40,11 @@ describe('Modern Console', function(){
 	});
 
 	describe('#log() // with colors', function(){
-		it('should return chrome colored message', function(){
+		it('should return colored message', function(){
 			assert.deepEqual(console.log('message'.red), ["%cmessage%c", "color:#de4f2a;", ""]);
 		})
 
-		it('should return chrome colored message', function(){
+		it('should return colored message', function(){
 			assert.deepEqual(console.log('message'.red + 'something'.blue), ["%cmessage%c%csomething%c", "color:#de4f2a;", "", "color:#1795de;", ""]);
 		})
 	});
@@ -101,11 +101,11 @@ describe('Degraded Console Without Colors', function(){
 	});
 
 	describe('#log() // with colors', function(){
-		it('should return chrome colored message', function(){
+		it('should return colored message', function(){
 			assert.equal(console.log('message'.red), 'message');
 		})
 
-		it('should return chrome colored message', function(){
+		it('should return colored message', function(){
 			assert.equal(console.log('message'.red + 'something'.blue), 'messagesomething');
 		})
 	});
@@ -162,11 +162,11 @@ describe('Degraded Console Without Colors or Groups', function(){
 	});
 
 	describe('#log() // with colors', function(){
-		it('should return chrome colored message', function(){
+		it('should return colored message', function(){
 			assert.equal(console.log('message'.red), 'message');
 		})
 
-		it('should return chrome colored message with multiple args', function(){
+		it('should return colored message with multiple args', function(){
 			assert.equal(console.log('message'.red + 'something'.blue), 'messagesomething');
 		})
 	});
@@ -262,11 +262,11 @@ describe('Degraded Console Without Colors or Groups and In Legacy Mode', functio
 	});
 
 	describe('#log() // with colors', function(){
-		it('should return chrome colored message', function(){
+		it('should return colored message', function(){
 			assert.equal(console.log('message'.legacyRed()), 'message');
 		})
 
-		it('should return chrome colored message with multiple args', function(){
+		it('should return colored message with multiple args', function(){
 			assert.equal(console.log('message'.legacyRed() + 'something'.legacyBlue()), 'messagesomething');
 		})
 	});
