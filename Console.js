@@ -24,11 +24,27 @@ if (!Array.prototype.forEach)
 }
 
 var Console = (function () {
-	var applySupport = !document.documentMode || document.documentMode && document.documentMode >= 9,
-		getterSupport = applySupport,
-		colorSupport = window.chrome;
-
 	var Console = {};
+
+	var browser = {};
+	browser.isFirefox = /firefox/i.test(navigator.userAgent);
+	browser.isIE = document.documentMode;
+
+	var support = {};
+
+	function detectSupport () {
+		support.consoleApply = !browser.isIE || document.documentMode && document.documentMode > 9;
+		support.functionGetters = support.consoleApply;
+		support.consoleColors = !!window.chrome;
+		support.console = !!window.console;
+		support.modifiedConsole = !browser.isIE && support.console && console.log.toString().indexOf('apply') !== -1;
+		support.consoleGroups = !!(window.console && console.group);
+
+		if (browser.isFirefox && !support.modifiedConsole) {
+			support.consoleGroups = false;
+			support.consoleApply = false;
+		}
+	}
 
 	var Colors = (function () {
 		var existingStyleSpanRegExp = /^<span style="([^"]+)">.+<\/span>$/,
@@ -39,7 +55,7 @@ var Console = (function () {
 			function getter () {
 				var string = this.toString();
 
-				if (!colorSupport) {
+				if (!support.consoleColors) {
 					return string;
 				}
 
@@ -58,18 +74,20 @@ var Console = (function () {
 				return string;
 			}
 
-			if (!getterSupport && !Console.legacySupport) {
+			if (!support.functionGetters && !Console.legacySupport) {
 				String.prototype[name] = '<Console.js:INVALID_GETTER_ATTEMPT>';
 			} else if (Console.legacySupport) {
 				getter.toString = function () {
 					return '<Console.js:INVALID_GETTER_ATTEMPT>';
 				};
 
-				String.prototype[name] = getter
+				String.prototype[name] = getter;
 			} else if (Object.defineProperty) {
 				Object.defineProperty(String.prototype, name, {get: getter});
 			} else if (String.prototype.__defineGetter__) {
 				String.prototype.__defineGetter__(name, getter);
+			} else {
+				String.prototype[name] = '';
 			}
 		}
 
@@ -119,21 +137,29 @@ var Console = (function () {
 		};
 	})();
 
-	var Logging = (function () {
+	function attach () {
 		var methodNames = ['log', 'group', 'groupCollapsed', 'warn', 'info'],
 			groupLevel = 0;
 
 		// browser compatibility
-		if (!window.console) {
+		if (!support.console) {
 			window.console = {log: function () {}};
 		}
 
-		var groupSupport = console.group;
-
 		// groupEnd not supported
-		if (!groupSupport) {
+		if (!support.consoleGroups) {
+			if (console.group) {
+				delete console.group;
+				delete console.groupCollapsed;
+				delete console.groupEnd;
+			}
+
+			var groupEnd = console.groupEnd ? console.groupEnd.bind(console) : null;
 			console.groupEnd = function () {
 				groupLevel--;
+				if (groupEnd) {
+					groupEnd();
+				}
 			};
 		}
 
@@ -147,7 +173,7 @@ var Console = (function () {
 
 				var args = Array.prototype.slice.call(arguments);
 
-				if (!groupSupport) {
+				if (!support.consoleGroups) {
 					if (name === 'group' || name === 'groupCollapsed') {
 						groupLevel++;
 					} else if (name === 'log') {
@@ -156,13 +182,14 @@ var Console = (function () {
 							for (var i = 0; i < groupLevel; i++) {
 								groupPadding += '-';
 							}
+							groupPadding += ' ';
 							args.splice(0, 0, groupPadding);
 						}
 					}
 				}
 
-				if (applySupport) {
-					method.apply(console, Colors.argumentsToConsoleArguments(args));
+				if (support.consoleApply) {
+					return method.apply(console, Colors.argumentsToConsoleArguments(args));
 				} else {
 					var message = Colors.argumentsToConsoleArguments(args).join(' ');
 
@@ -174,12 +201,36 @@ var Console = (function () {
 						message = 'Error Console.js: you need to call your style() methods';
 					}
 
-					method(message);
+					return method(message);
 				}
 			};
 		});
-	})();
+	};
 
+	function detatch () {
+		for (var methodName in console) {
+			if (methodName.substr(0, 1) === '_' && console[methodName.substr(1)]) {
+				if (console.__proto__ && console.__proto__.log) {
+					delete console[methodName.substr(1)];
+				} else {
+					console[methodName.substr(1)] = console[methodName];
+				}
+
+				delete console[methodName];
+			}
+		}
+	}
+
+	detectSupport();
+
+	if (!window.DO_NOT_AUTO_ATTACH_CONSOLE) {
+		attach();
+	}
+
+	Console.detectSupport = detectSupport;
+	Console.attach = attach;
+	Console.detatch = detatch;
+	Console.support = support;
 	Console.logging = true;
 	Console.legacySupport = false;
 	Console.registerStyle = Colors.registerStyle;

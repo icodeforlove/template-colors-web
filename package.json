@@ -1,0 +1,25 @@
+{
+  "name": "colors",
+  "version": "0.0.0",
+  "description": "",
+  "main": "Console.js",
+  "dependencies": {
+    "mocha": "^1.18.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/icodeforlove/console.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/icodeforlove/console.js/issues"
+  },
+  "homepage": "https://github.com/icodeforlove/console.js"
+}
