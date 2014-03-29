@@ -15,17 +15,27 @@
 				green: 'color:green',
 				grey: 'color:grey',
 				orange: 'color:#ffa500',
-				heading: 'color: black; font-size: 32px; line-height: 32px;'
+				heading: 'color: black; font-size: 32px; line-height: 32px;',
+				code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
 			});
 
-			console.log('hello '.blue + 'world'.red.underline);
-			console.group('group start (one style)'.red);
-			console.group('group start (' + 'multiple'.green + ' ' + 'styles'.blue + ')');
-			console.log('group log'.bold);
-			console.log('group log'.underline);
-			console.groupEnd();
-			console.groupEnd();
+			console.warn('Framework.js: '.bold + 'You can not call ' + '.do()'.underline + ' without a config argument');
+			console.info('Framework.js: '.bold + '' + '.something()'.underline + ' has been deprecated since ' + 'v1.0.1'.underline);
+
 			console.log('normal log');
+			console.log('colored'.blue + ' log');
+			console.log('log with a ' + 'code()'.code + ' example');
+
+			console.group('Finger Event '.blue + 'touch');
+			console.group('Arm Event Bubble '.grey + 'touch');
+			console.group('Hand Event Bubble '.grey + 'touch');
+			console.group('Body Event Bubble '.green + 'touch');
+			console.log('some information');
+			console.groupEnd();
+			console.groupEnd();
+			console.groupEnd();
+			console.groupEnd();
+
 		</script>
 	</head>
 </html>
