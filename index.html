@@ -10,8 +10,43 @@
 		<script type="text/javascript" src="Stack.js"></script>
 
 		<script type="text/javascript">
-			// Console.attach();
-			// Console.detach();
+			// Compatibility Mode!
+
+			// add shorthand reference to format method
+			// window.F = Console.styles.format;
+
+			// Console.styles.register({
+			// 	bold: 'font-weight:bold',
+			// 	underline: 'text-decoration:underline',
+			// 	red: 'color:#de4f2a',
+			// 	blue: 'color:#1795de',
+			// 	green: 'color:green',
+			// 	grey: 'color:grey',
+			// 	orange: 'color:#ffa500',
+			// 	heading: 'color: black; font-size: 32px; line-height: 32px;',
+			// 	code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
+			// });
+
+			// Console.warn(F(Console.getFileAndLineNumber(), 'bold') + F('.do()', 'underline') + ' without a config argument');
+			// Console.info(F(Console.getFileAndLineNumber(), 'bold') + '' + F('.something()', 'underline') + ' has been deprecated since ' + F('v1.0.1', 'underline'));
+
+			// Console.log('normal log');
+			// Console.log(F('colored', 'blue') + ' log');
+			// Console.log('log with a ' + F('code()', 'code') + ' example');
+			// Console.log('log with ' + F('multiple styles', 'red,underline'));
+
+			// Console.group(F('Finger Event ', 'blue') + 'touch');
+			// Console.group(F('Hand Event Bubble ', 'grey') + 'touch');
+			// Console.group(F('Arm Event Bubble ', 'grey') + 'touch');
+			// Console.group(F('Body Event Bubble ', 'green') + 'touch');
+			// Console.log('some information');
+			// Console.groupEnd();
+			// Console.groupEnd();
+			// Console.groupEnd();
+			// Console.groupEnd();
+
+			// Latest Browser Mode
+			Console.attach();
 			Console.styles.attach();
 
 			Console.styles.register({
@@ -25,27 +60,14 @@
 				heading: 'color: black; font-size: 32px; line-height: 32px;',
 				code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
 			});
-		</script>
-		<!--script type="text/javascript">
-			// Modern browsers
-			Console.registerStyles({
-				bold: 'font-weight:bold',
-				underline: 'text-decoration:underline',
-				red: 'color:#de4f2a',
-				blue: 'color:#1795de',
-				green: 'color:green',
-				grey: 'color:grey',
-				orange: 'color:#ffa500',
-				heading: 'color: black; font-size: 32px; line-height: 32px;',
-				code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
-			});
 
-			console.warn('Framework.js: '.bold + 'You can not call ' + '.do()'.underline + ' without a config argument');
-			console.info('Framework.js: '.bold + '' + '.something()'.underline + ' has been deprecated since ' + 'v1.0.1'.underline);
+			console.warn(Console.getFileAndLineNumber().bold + 'You can not call ' + '.do()'.underline + ' without a config argument');
+			console.info(Console.getFileAndLineNumber().bold + '.something()'.underline + ' has been deprecated since ' + 'v1.0.1'.underline);
 
 			console.log('normal log');
 			console.log('colored'.blue + ' log');
 			console.log('log with a ' + 'code()'.code + ' example');
+			console.log('log with ' + 'multiple styles'.red.underline);
 
 			console.group('Finger Event '.blue + 'touch');
 			console.group('Hand Event Bubble '.grey + 'touch');
@@ -56,7 +78,6 @@
 			console.groupEnd();
 			console.groupEnd();
 			console.groupEnd();
-
-		</script-->
+		</script>
 	</head>
 </html>

@@ -25,37 +25,39 @@ Console.styles = (function () {
 	function registerStyle (name, style) {
 		styles[name] = style;
 
-		if (attach) {
+		if (attached) {
 			function getter () {
 				return format(this.toString(), name);
 			}
 
-			if (Object.defineProperty) {
+			if (Object.defineProperty && Console.support.functionGetters) {
 				Object.defineProperty(String.prototype, name, {get: getter});
 			} else if (String.prototype.__defineGetter__) {
 				String.prototype.__defineGetter__(name, getter);
 			} else {
-				String.prototype[name] = '';
+				String.prototype[name] = '<STYLES:UNSUPPORTED>';
 			}
 		}
 	}
 
 	function format (string, names) {
-		names.split(',').forEach(function (name) {
-			var style = styles[name];
+		if (Console.support.consoleStyles) {
+			names.split(',').forEach(function (name) {
+				var style = styles[name];
 
-			if (existingSpanRegExp.test(string)) {
-				string = string.replace(existingSpanRegExp, function (match, styles) {
-					if (!styles.match(style)) {
-						return match.replace(spanOpenRegExp, '<span style="' + styles + style + ';">');
-					} else {
-						return match;
-					}
-				});
-			} else {
-				string = '<span style="' + style + ';">' + string + '</span>';
-			}
-		});
+				if (existingSpanRegExp.test(string)) {
+					string = string.replace(existingSpanRegExp, function (match, styles) {
+						if (!styles.match(style)) {
+							return match.replace(spanOpenRegExp, '<span style="' + styles + style + ';">');
+						} else {
+							return match;
+						}
+					});
+				} else {
+					string = '<span style="' + style + ';">' + string + '</span>';
+				}
+			});
+		}
 
 		return string;
 	}
