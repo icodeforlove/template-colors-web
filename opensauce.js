@@ -11,7 +11,6 @@ sauceConnectLauncher(
 		username: process.env.SAUCE_USERNAME,
 		accessKey: process.env.SAUCE_ACCESS_KEY,
 		verbose: false
-		//logger: console.log
 	},
 	function (err, sauceConnectProcess) {
 		var failed = false;
