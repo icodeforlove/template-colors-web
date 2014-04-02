@@ -4,13 +4,18 @@
   "description": "",
   "main": "Console.js",
   "dependencies": {
-    "mocha": "^1.18.2"
+    "mocha-sauce": "git://github.com/pbakaus/mocha-sauce.git",
+    "mocha": "^1.18.2",
+    "props": "^0.3.0",
+    "express": "^3.5.1",
+    "sauce-connect-launcher": "^0.3.3",
+    "colors": "^0.6.2"
   },
   "devDependencies": {
     "mocha": "~1.18.2"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "node opensauce.js"
   },
   "repository": {
     "type": "git",

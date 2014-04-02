@@ -2,11 +2,11 @@ Console.Stack = function (stack) {
 	this._stackString = stack || new Error().stack || '';
 };
 Console.Stack.prototype = {
-	_geckoStackWithMethodNameRegExp: /\b([a-z0-9_-]+)@.*\/([^\/]+)\:(\d*)$/i,
+	_geckoStackWithMethodNameRegExp: /\b([a-z0-9_-]+)@.*\/([^\/]*)\:(\d*)$/i,
 	_geckoStackWithoutMethodName: /@.*\/([^\/]+)\:(\d*)$/i,
 
-	_webkitStackWithMethodNameRegExp: /.+\b([a-z0-9_-]+) \(.*\/([^\/]+)\:(\d*)\:(\d+)\)$/i,
-	_webkitStackWithoutMethodName: /at .*\/([^\/]+)\:(\d*)\:(\d+)/i,
+	_webkitStackWithMethodNameRegExp: /.+\b([a-z0-9_-]+) \(.*\/([^\/]*)\:(\d*)\:(\d+)\)$/i,
+	_webkitStackWithoutMethodName: /at .*\/([^\/]*)\:(\d*)\:(\d+)/i,
 
 	parse: function () {
 		var stack = this._stackString;

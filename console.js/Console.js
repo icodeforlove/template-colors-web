@@ -31,7 +31,7 @@ var Console = (function () {
 
 	if (browser.isFirefox && !support.modifiedConsole) {
 		support.consoleGroups = false;
-		support.consoleApply = false;
+		support.consoleApply = true;
 	}
 
 	// general way to calling console methods
@@ -55,12 +55,14 @@ var Console = (function () {
 		}
 
 		if (support.consoleApply) {
-			consoleMethodReferences[method].apply(consoleReference, args);
+			return consoleMethodReferences[method].apply(consoleReference, args);
 		} else {
 			var message = args.join(' ');
 
 			if (!message.match('<STYLES:UNSUPPORTED>')) {
-				consoleMethodReferences[method](args.join(' '));
+				return consoleMethodReferences[method](args.join(' '));
+			} else {
+				return '<STYLES:UNSUPPORTED>';
 			}
 		}
 	}
@@ -80,7 +82,7 @@ var Console = (function () {
 	// public interface
 	return {
 		log: function () {
-			applyConsoleMethod('log', arguments);
+			return applyConsoleMethod('log', arguments);
 		},
 
 		group: function () {
@@ -92,7 +94,7 @@ var Console = (function () {
 				prependGroupPaddingToArguments(args);
 			}
 
-			applyConsoleMethod('group', args);
+			return applyConsoleMethod('group', args);
 		},
 
 		groupCollapsed: function () {
@@ -104,25 +106,21 @@ var Console = (function () {
 				prependGroupPaddingToArguments(args);
 			}
 
-			applyConsoleMethod('groupCollapsed', args);
+			return applyConsoleMethod('groupCollapsed', args);
 		},
 
 		groupEnd: function () {
 			groupDepth--;
 
-			applyConsoleMethod('groupEnd', arguments);
+			return applyConsoleMethod('groupEnd', arguments);
 		},
 
 		warn: function () {
-			applyConsoleMethod('warn', arguments);
+			return applyConsoleMethod('warn', arguments);
 		},
 
 		info: function () {
-			applyConsoleMethod('info', arguments);
-		},
-
-		unknown: function () {
-			applyConsoleMethod('unknown', arguments);
+			return applyConsoleMethod('info', arguments);
 		},
 
 		attach: function () {
@@ -148,6 +146,8 @@ var Console = (function () {
 		},
 
 		support: support,
+
+		consoleMethodReferences: consoleMethodReferences,
 
 		getFileAndLineNumber: function (caller, offset) {
 			var stack = new Console.Stack(),
