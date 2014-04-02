@@ -4,8 +4,29 @@
 		<meta charset="UTF-8">
 		<title>console.js</title>
 
+		<script type="text/javascript" src="ecma5.js"></script>
 		<script type="text/javascript" src="Console.js"></script>
+		<script type="text/javascript" src="Styles.js"></script>
+		<script type="text/javascript" src="Stack.js"></script>
+
 		<script type="text/javascript">
+			Console.attach();
+			Console.detach();
+			Console.styles.attach();
+
+			Console.styles.register({
+				bold: 'font-weight:bold',
+				underline: 'text-decoration:underline',
+				red: 'color:#de4f2a',
+				blue: 'color:#1795de',
+				green: 'color:green',
+				grey: 'color:grey',
+				orange: 'color:#ffa500',
+				heading: 'color: black; font-size: 32px; line-height: 32px;',
+				code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
+			});
+		</script>
+		<!--script type="text/javascript">
 			// Modern browsers
 			Console.registerStyles({
 				bold: 'font-weight:bold',
@@ -36,6 +57,6 @@
 			console.groupEnd();
 			console.groupEnd();
 
-		</script>
+		</script-->
 	</head>
 </html>
