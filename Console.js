@@ -1,5 +1,6 @@
 var Console = (function () {
-	var consoleMethodNames = ['log', 'group', 'groupCollapsed', 'groupEnd', 'warn', 'info'];
+	var consoleMethodNames = ['log', 'group', 'groupCollapsed', 'groupEnd', 'warn', 'info'],
+		groupDepth = 0;
 
 	// preserve original console
 	var consoleReference = console;
@@ -10,7 +11,7 @@ var Console = (function () {
 	});
 
 	// general way to calling console methods
-	function consoleApplyMethod (method, args) {
+	function applyConsoleMethod (method, args) {
 		args = Array.prototype.slice.call(args);
 
 		args = Console.styles.argumentsToConsoleArguments(args);
@@ -28,34 +29,68 @@ var Console = (function () {
 		consoleMethodReferences[method].apply(consoleReference, args);
 	}
 
+	function prependGroupPaddingToArguments (args) {
+		var args = Array.prototype.slice.call(args),
+			string = '';
+
+		for (var i = 0; i < groupDepth; i++) {
+			string += '-';
+		}
+
+		if (string) {
+			args.splice(0, 0, string);
+		}
+
+		return args;
+	}
+
 	// public interface
 	return {
 		log: function () {
-			consoleApplyMethod('log', arguments);
+			applyConsoleMethod('log', arguments);
 		},
 
 		group: function () {
-			consoleApplyMethod('group', arguments);
+			var args = arguments;
+
+			groupDepth++;
+			alert(groupDepth)
+//consoleMethodReferences.log('test')
+			//if (!consoleMethodReferences.group) {
+				prependGroupPaddingToArguments(args);
+			//}
+
+			applyConsoleMethod('groupCollapsed', args);
 		},
 
 		groupCollapsed: function () {
-			consoleApplyMethod('groupCollapsed', arguments);
+			var args = arguments;
+
+			groupDepth++;
+
+			if (!consoleMethodReferences.group) {
+				prependGroupPaddingToArguments(args);
+			}
+
+			applyConsoleMethod('groupCollapsed', args);
 		},
 
 		groupEnd: function () {
-			consoleApplyMethod('group', arguments);
+			groupDepth--;
+
+			applyConsoleMethod('group', arguments);
 		},
 
 		warn: function () {
-			consoleApplyMethod('warn', arguments);
+			applyConsoleMethod('warn', arguments);
 		},
 
 		info: function () {
-			consoleApplyMethod('info', arguments);
+			applyConsoleMethod('info', arguments);
 		},
 
 		unknown: function () {
-			consoleApplyMethod('unknown', arguments);
+			applyConsoleMethod('unknown', arguments);
 		},
 
 		attach: function () {
