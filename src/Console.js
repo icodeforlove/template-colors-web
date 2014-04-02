@@ -4,7 +4,7 @@ var Console = (function () {
 	browser.isFirefox = /firefox/i.test(navigator.userAgent);
 	browser.isIE = document.documentMode;
 
-	var support = support = {};
+	var support = {};
 	support.consoleApply = !browser.isIE || document.documentMode && document.documentMode > 9;
 	support.functionGetters = support.consoleApply;
 	support.console = !!window.console;
@@ -154,7 +154,7 @@ var Console = (function () {
 				line = stack.getLineByCaller(caller, offset);
 
 			if (line) {
-				return line.fileName + ':' + line.lineNumber + ' '
+				return line.fileName + ':' + line.lineNumber + ' ';
 			} else {
 				return '';
 			}

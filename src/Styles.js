@@ -25,11 +25,11 @@ Console.styles = (function () {
 	function registerStyle (name, style) {
 		styles[name] = style;
 
-		if (attached) {
-			function getter () {
-				return format(this.toString(), name);
-			}
+		function getter () {
+			return format(this.toString(), name);
+		}
 
+		if (attached) {
 			if (Object.defineProperty && Console.support.functionGetters) {
 				Object.defineProperty(String.prototype, name, {get: getter});
 			} else if (String.prototype.__defineGetter__) {
