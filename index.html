@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Console.js by icodeforlove</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Console.js</h1>
+        <p></p>
+
+        <p class="view"><a href="https://github.com/icodeforlove/console.js">View the Project on GitHub <small>icodeforlove/console.js</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/icodeforlove/console.js/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/icodeforlove/console.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/icodeforlove/console.js">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="consolejs" class="anchor" href="#consolejs"><span class="octicon octicon-link"></span></a>console.js</h1>
+
+<p>A sane way to interface with your console and use the latest features.</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/139784/2598269/2cf8e294-bac3-11e3-8f5e-875cb251839d.gif" alt="console"></p>
+
+<h2>
+<a name="support" class="anchor" href="#support"><span class="octicon octicon-link"></span></a>support</h2>
+
+<p><a href="https://saucelabs.com/u/consolejs"><img src="https://saucelabs.com/browser-matrix/consolejs.svg" alt="Selenium Test Status"></a></p>
+
+<h2>
+<a name="modern-usage-chrome--firefox--ie--9" class="anchor" href="#modern-usage-chrome--firefox--ie--9"><span class="octicon octicon-link"></span></a>modern usage (Chrome / Firefox / IE &gt;= 9)</h2>
+
+<p>modern mode is great if you're fine with overriding console methods, and don't mind additional methods on your String.prototype</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Step 1: override console methods and enable String.prototype styles</span>
+<span class="nx">Console</span><span class="p">.</span><span class="nx">attach</span><span class="p">();</span>
+<span class="nx">Console</span><span class="p">.</span><span class="nx">styles</span><span class="p">.</span><span class="nx">attach</span><span class="p">();</span>
+
+<span class="c1">// Step 2: register your styles</span>
+<span class="nx">Console</span><span class="p">.</span><span class="nx">styles</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
+    <span class="nx">bold</span><span class="o">:</span> <span class="s1">'font-weight:bold'</span><span class="p">,</span>
+    <span class="nx">underline</span><span class="o">:</span> <span class="s1">'text-decoration:underline'</span><span class="p">,</span>
+
+    <span class="nx">red</span><span class="o">:</span> <span class="s1">'color:#de4f2a'</span><span class="p">,</span>
+    <span class="nx">blue</span><span class="o">:</span> <span class="s1">'color:#1795de'</span><span class="p">,</span>
+    <span class="nx">green</span><span class="o">:</span> <span class="s1">'color:green'</span><span class="p">,</span>
+    <span class="nx">grey</span><span class="o">:</span> <span class="s1">'color:grey'</span><span class="p">,</span>
+
+    <span class="nx">code</span><span class="o">:</span> <span class="s1">'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'</span>
+<span class="p">});</span>
+
+<span class="c1">// Step 3: profit!</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">.</span><span class="nx">red</span><span class="p">.</span><span class="nx">bold</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="compatibility-usage" class="anchor" href="#compatibility-usage"><span class="octicon octicon-link"></span></a>compatibility usage</h2>
+
+<p>compatibility mode is useful if you want your logs to work in IE &lt; 9, or you don't want be invasive on the console or String.prototype</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Step 1: because we aren't using String.prototype, we make our lives a little easier by creating a shortcut</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">F</span> <span class="o">=</span> <span class="nx">Console</span><span class="p">.</span><span class="nx">styles</span><span class="p">.</span><span class="nx">format</span><span class="p">;</span>
+
+<span class="c1">// Step 2: register your styles</span>
+<span class="nx">Console</span><span class="p">.</span><span class="nx">styles</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
+    <span class="nx">bold</span><span class="o">:</span> <span class="s1">'font-weight:bold'</span><span class="p">,</span>
+    <span class="nx">underline</span><span class="o">:</span> <span class="s1">'text-decoration:underline'</span><span class="p">,</span>
+
+    <span class="nx">red</span><span class="o">:</span> <span class="s1">'color:#de4f2a'</span><span class="p">,</span>
+    <span class="nx">blue</span><span class="o">:</span> <span class="s1">'color:#1795de'</span><span class="p">,</span>
+    <span class="nx">green</span><span class="o">:</span> <span class="s1">'color:green'</span><span class="p">,</span>
+    <span class="nx">grey</span><span class="o">:</span> <span class="s1">'color:grey'</span><span class="p">,</span>
+
+    <span class="nx">code</span><span class="o">:</span> <span class="s1">'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'</span>
+<span class="p">});</span>
+
+<span class="c1">// Step 3: profit!</span>
+<span class="nx">Console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">F</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'red,bold'</span><span class="p">));</span>
+</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/icodeforlove">icodeforlove</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
