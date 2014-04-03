@@ -1,4 +1,4 @@
-# console.js
+# Console.js
 
 A sane way to interface with your console and use the latest features.
 
