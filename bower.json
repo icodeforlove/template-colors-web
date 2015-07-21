@@ -1,0 +1,29 @@
+{
+  "name": "console.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/icodeforlove/Console.js",
+  "authors": [
+    {
+      "name": "Chad Scira"
+    }
+  ],
+  "description": "Easy coloured console logs",
+  "main": "console.js",
+  "keywords": [
+    "console",
+    "colour",
+    "log"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/icodeforlove/Console.js.git"
+  }
+}
