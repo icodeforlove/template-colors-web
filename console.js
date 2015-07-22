@@ -218,14 +218,24 @@ if (!Array.prototype.map)
 	var existingSpanRegExp = /^<span style="([^"]+)">.+<\/span>$/,
 		spanOpenRegExp = /^<span style="([^"]+)">/,
 		spanOpenOrCloseRegExp = /<span style="[^"]+">|<\/span>/g,
+		jsonPartsRegExp = /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+		prettyJsonKey = 'json',
 		styles = {},
 		defaultStyles = {
 			red: 'color: red',
 			blue: 'color: blue',
-			green: 'color: green'
+			green: 'color: green',
+			darkorange: 'color: darkorange',
+			magenta: 'color: magenta'
 		},
-		attached = false,
-		prettyObjectKey = 'object';
+		jsonStyle = {
+			'string': 'green',
+			'number': 'darkorange',
+			'boolean': 'blue',
+			'null': 'magenta',
+			'key': 'red'
+		},
+		attached = false;
 
 	function attach () {
 		attached = true;
@@ -233,17 +243,17 @@ if (!Array.prototype.map)
 
 	function register () {
 		if (typeof arguments[0] === 'object') {
-			var styles = arguments[0];
+			var styles = defaultStyles;
 
-			for (var defaultStyle in defaultStyles) {
-				if (!styles.hasOwnProperty(defaultStyle)) return;
-				styles[defaultStyle] = defaultStyles[defaultStyle];
+			for (var userStyle in arguments[0]) {
+				if (!arguments[0].hasOwnProperty(userStyle)) return;
+				styles[userStyle] = arguments[0][userStyle];
 			}
 
-			if (Object.keys(styles).indexOf(prettyObjectKey) != -1) {
-				throw new Error('Style "' + prettyObjectKey + '" is not permitted.');
+			if (Object.keys(arguments[0]).indexOf(prettyJsonKey) != -1) {
+				throw new Error('Style "' + prettyJsonKey + '" is not permitted.');
 			} else {
-				registerStyle(prettyObjectKey);
+				registerStyle(prettyJsonKey);
 			}
 
 			for (var name in styles) {
@@ -257,21 +267,23 @@ if (!Array.prototype.map)
 
 	function registerStyle (name, style) {
 		var getter;
+
+		// avoid redefining getter
+		if (styles.hasOwnProperty(name)) return;
 		styles[name] = style;
 
-		function defaultGetter () {
+		var defaultGetter = function () {
 			return format(this.toString(), name);
-		}
+		};
 
-		function objectGetter () {
-			var
-				_string = 'color:green',
-				_number = 'color:darkorange',
-				_boolean = 'color:blue',
-				_null = 'color:magenta',
-				_key = 'color:red';
+		var jsonGetter = function () {
+			var _string = jsonStyle.string,
+				_number = jsonStyle.number,
+				_boolean = jsonStyle.boolean,
+				_null = jsonStyle.null,
+				_key = jsonStyle.key;
 
-			var json = this.toString().replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+			return this.toString().replace(jsonPartsRegExp, function (match) {
 				var style = _number;
 				if (/^"/.test(match)) {
 					if (/:$/.test(match)) {
@@ -284,17 +296,12 @@ if (!Array.prototype.map)
 				} else if (/null/.test(match)) {
 					style = _null;
 				}
-				arr.push(style);
-				arr.push('');
 				return match[style];
 			});
+		};
 
-			arr.unshift(json);
-			return arr;
-		}
-
-		if (name == prettyObjectKey) {
-			getter = objectGetter;
+		if (name === prettyJsonKey) {
+			getter = jsonGetter;
 		} else {
 			getter = defaultGetter;
 		}

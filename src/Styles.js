@@ -61,11 +61,11 @@ Console.styles = (function () {
 		};
 
 		var jsonGetter = function () {
-			var _string = jsonStyle['string'],
-				_number = jsonStyle['number'],
-				_boolean = jsonStyle['boolean'],
-				_null = jsonStyle['null'],
-				_key = jsonStyle['key'];
+			var _string = jsonStyle.string,
+				_number = jsonStyle.number,
+				_boolean = jsonStyle.boolean,
+				_null = jsonStyle.null,
+				_key = jsonStyle.key;
 
 			return this.toString().replace(jsonPartsRegExp, function (match) {
 				var style = _number;
