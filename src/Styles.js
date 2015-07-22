@@ -2,7 +2,23 @@ Console.styles = (function () {
 	var existingSpanRegExp = /^<span style="([^"]+)">.+<\/span>$/,
 		spanOpenRegExp = /^<span style="([^"]+)">/,
 		spanOpenOrCloseRegExp = /<span style="[^"]+">|<\/span>/g,
+		jsonPartsRegExp = /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+		prettyJsonKey = 'json',
 		styles = {},
+		defaultStyles = {
+			red: 'color: red',
+			blue: 'color: blue',
+			green: 'color: green',
+			darkorange: 'color: darkorange',
+			magenta: 'color: magenta'
+		},
+		jsonStyle = {
+			'string': 'green',
+			'number': 'darkorange',
+			'boolean': 'blue',
+			'null': 'magenta',
+			'key': 'red'
+		},
 		attached = false;
 
 	function attach () {
@@ -11,7 +27,18 @@ Console.styles = (function () {
 
 	function register () {
 		if (typeof arguments[0] === 'object') {
-			var styles = arguments[0];
+			var styles = defaultStyles;
+
+			for (var userStyle in arguments[0]) {
+				if (!arguments[0].hasOwnProperty(userStyle)) return;
+				styles[userStyle] = arguments[0][userStyle];
+			}
+
+			if (Object.keys(arguments[0]).indexOf(prettyJsonKey) != -1) {
+				throw new Error('Style "' + prettyJsonKey + '" is not permitted.');
+			} else {
+				registerStyle(prettyJsonKey);
+			}
 
 			for (var name in styles) {
 				if (!styles.hasOwnProperty(name)) return;
@@ -23,10 +50,44 @@ Console.styles = (function () {
 	}
 
 	function registerStyle (name, style) {
+		var getter;
+
+		// avoid redefining getter
+		if (styles.hasOwnProperty(name)) return;
 		styles[name] = style;
 
-		function getter () {
+		var defaultGetter = function () {
 			return format(this.toString(), name);
+		};
+
+		var jsonGetter = function () {
+			var _string = jsonStyle['string'],
+				_number = jsonStyle['number'],
+				_boolean = jsonStyle['boolean'],
+				_null = jsonStyle['null'],
+				_key = jsonStyle['key'];
+
+			return this.toString().replace(jsonPartsRegExp, function (match) {
+				var style = _number;
+				if (/^"/.test(match)) {
+					if (/:$/.test(match)) {
+						style = _key;
+					} else {
+						style = _string;
+					}
+				} else if (/true|false/.test(match)) {
+					style = _boolean;
+				} else if (/null/.test(match)) {
+					style = _null;
+				}
+				return match[style];
+			});
+		};
+
+		if (name === prettyJsonKey) {
+			getter = jsonGetter;
+		} else {
+			getter = defaultGetter;
 		}
 
 		if (attached) {

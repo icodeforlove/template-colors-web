@@ -219,7 +219,13 @@ if (!Array.prototype.map)
 		spanOpenRegExp = /^<span style="([^"]+)">/,
 		spanOpenOrCloseRegExp = /<span style="[^"]+">|<\/span>/g,
 		styles = {},
-		attached = false;
+		defaultStyles = {
+			red: 'color: red',
+			blue: 'color: blue',
+			green: 'color: green'
+		},
+		attached = false,
+		prettyObjectKey = 'object';
 
 	function attach () {
 		attached = true;
@@ -228,6 +234,17 @@ if (!Array.prototype.map)
 	function register () {
 		if (typeof arguments[0] === 'object') {
 			var styles = arguments[0];
+
+			for (var defaultStyle in defaultStyles) {
+				if (!styles.hasOwnProperty(defaultStyle)) return;
+				styles[defaultStyle] = defaultStyles[defaultStyle];
+			}
+
+			if (Object.keys(styles).indexOf(prettyObjectKey) != -1) {
+				throw new Error('Style "' + prettyObjectKey + '" is not permitted.');
+			} else {
+				registerStyle(prettyObjectKey);
+			}
 
 			for (var name in styles) {
 				if (!styles.hasOwnProperty(name)) return;
@@ -239,10 +256,47 @@ if (!Array.prototype.map)
 	}
 
 	function registerStyle (name, style) {
+		var getter;
 		styles[name] = style;
 
-		function getter () {
+		function defaultGetter () {
 			return format(this.toString(), name);
+		}
+
+		function objectGetter () {
+			var
+				_string = 'color:green',
+				_number = 'color:darkorange',
+				_boolean = 'color:blue',
+				_null = 'color:magenta',
+				_key = 'color:red';
+
+			var json = this.toString().replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+				var style = _number;
+				if (/^"/.test(match)) {
+					if (/:$/.test(match)) {
+						style = _key;
+					} else {
+						style = _string;
+					}
+				} else if (/true|false/.test(match)) {
+					style = _boolean;
+				} else if (/null/.test(match)) {
+					style = _null;
+				}
+				arr.push(style);
+				arr.push('');
+				return match[style];
+			});
+
+			arr.unshift(json);
+			return arr;
+		}
+
+		if (name == prettyObjectKey) {
+			getter = objectGetter;
+		} else {
+			getter = defaultGetter;
 		}
 
 		if (attached) {
