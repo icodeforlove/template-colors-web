@@ -31,11 +31,49 @@ if (Console.support.console && !Console.support.consoleStyles && Console.support
 				});
 			});
 
-			it('should throw an Error if trying to define ' + Console.styles.jsonGetter + ' style', function() {
+			it('should throw an Error if trying to define wrong ' + Console.styles.jsonGetter + ' style', function() {
 				var styles = {};
 				styles[Console.styles.jsonGetter] = { a: 'something' };
 
 				expect(Console.styles.register.bind(Console.styles, styles)).to.throwError();
+			});
+
+			it('should throw an Error if trying to define ' + Console.styles.jsonGetter + ' style with missing keys', function() {
+				var styles = {};
+				styles[Console.styles.jsonGetter] = {
+					'string': 'green',
+					'number': 'darkorange',
+					'null': 'magenta',
+					'key': 'red'
+				};
+
+				expect(Console.styles.register.bind(Console.styles, styles)).to.throwError();
+			});
+
+			it('should throw an Error if trying to define ' + Console.styles.jsonGetter + ' style with missing dependant style', function() {
+				var styles = {};
+				styles[Console.styles.jsonGetter] = {
+					'string': 'green',
+					'number': 'darkorange',
+					'boolean': 'blue-magenta',
+					'null': 'magenta',
+					'key': 'red'
+				};
+
+				expect(Console.styles.register.bind(Console.styles, styles)).to.throwError();
+			});
+
+			it('should not throw an Error if trying to define correct ' + Console.styles.jsonGetter + ' style', function() {
+				var styles = {};
+				styles[Console.styles.jsonGetter] = {
+					'string': 'green',
+					'number': 'darkorange',
+					'boolean': 'blue',
+					'null': 'magenta',
+					'key': 'red'
+				};
+
+				expect(Console.styles.register.bind(Console.styles, styles)).to.not.throwError();
 			});
 		});
 

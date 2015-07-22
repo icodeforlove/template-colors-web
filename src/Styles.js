@@ -27,19 +27,44 @@ Console.styles = (function () {
 
 	function register () {
 		if (typeof arguments[0] === 'object') {
-			var styles = defaultStyles;
+			var styles = defaultStyles,
+				userStyles = arguments[0];
 
-			for (var userStyle in arguments[0]) {
-				if (!arguments[0].hasOwnProperty(userStyle)) return;
-				styles[userStyle] = arguments[0][userStyle];
+			// check if `prettyJsonKey` is present and if
+			// that's the case, init the right style
+			if (Object.keys(userStyles).indexOf(prettyJsonKey) != -1) {
+				var verified = true,
+					userJsonStyles = userStyles[prettyJsonKey],
+					stylesKeys = Object.keys(styles),
+					userStylesKeys = Object.keys(userStyles);
+
+				// verify that the user defined style for `prettyJsonKey` has
+				// a key for each JSON components (bool, number, string, etc.)
+				// and that the associated color / style is defined
+				for (var jsonKey in jsonStyle) {
+					var dependantStyle = userJsonStyles[jsonKey],
+						isStyleDefined = stylesKeys.indexOf(dependantStyle) != -1 || userStylesKeys.indexOf(dependantStyle) != -1;
+					verified = userJsonStyles.hasOwnProperty(jsonKey) && isStyleDefined && verified;
+				}
+
+				if (verified) {
+					jsonStyle = userJsonStyles;
+				} else {
+					throw new Error('Invalid "' + prettyJsonKey + '" style.');
+				}
+				delete userStyles[prettyJsonKey];
 			}
 
-			if (Object.keys(arguments[0]).indexOf(prettyJsonKey) != -1) {
-				throw new Error('Style "' + prettyJsonKey + '" is not permitted.');
-			} else {
-				registerStyle(prettyJsonKey);
+			// merge remaining user defined styles
+			for (var userStyle in userStyles) {
+				if (!userStyles.hasOwnProperty(userStyle)) return;
+				styles[userStyle] = userStyles[userStyle];
 			}
 
+			// register `prettyJsonKey`
+			registerStyle(prettyJsonKey);
+
+			// register all the other styles
 			for (var name in styles) {
 				if (!styles.hasOwnProperty(name)) return;
 				registerStyle(name, styles[name]);
