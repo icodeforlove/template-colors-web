@@ -30,6 +30,13 @@ if (Console.support.console && !Console.support.consoleStyles && Console.support
 					compatibilityUnderline: 'text-decoration:underline'
 				});
 			});
+
+			it('should throw an Error if trying to define ' + Console.styles.jsonGetter + ' style', function() {
+				var styles = {};
+				styles[Console.styles.jsonGetter] = { a: 'something' };
+
+				expect(Console.styles.register.bind(Console.styles, styles)).to.throwError();
+			});
 		});
 
 		describe('#log()', function(){
@@ -43,6 +50,10 @@ if (Console.support.console && !Console.support.consoleStyles && Console.support
 
 			it('should work with multiple styled strings', function() {
 				expect(Console.log(F('foo', 'red') + F('bar', 'blue'))).to.eql(['foobar']);
+			});
+
+			it('should work with JSON', function() {
+				expect(Console.log(F(JSON.stringify(Mocks.obj), 'json'))).to.eql(Stubs.objNoStyle);
 			});
 		});
 
@@ -61,6 +72,11 @@ if (Console.support.console && !Console.support.consoleStyles && Console.support
 				expect(Console.group(F('foo', 'red') + F('bar', 'blue'))).to.eql(['foobar']);
 				Console.groupEnd();
 			});
+
+			it('should work with JSON', function() {
+				expect(Console.group(F(JSON.stringify(Mocks.obj), 'json'))).to.eql(Stubs.objNoStyle);
+				Console.groupEnd()
+			});
 		});
 
 		describe('#groupCollapsed()', function(){
@@ -78,6 +94,11 @@ if (Console.support.console && !Console.support.consoleStyles && Console.support
 				expect(Console.groupCollapsed(F('foo', 'red,underline') + F('bar', 'blue'))).to.eql(['foobar']);
 				Console.groupEnd();
 			});
+
+			it('should work with JSON', function() {
+				expect(Console.groupCollapsed(F(JSON.stringify(Mocks.obj), 'json'))).to.eql(Stubs.objNoStyle);
+				Console.groupEnd();
+			});
 		});
 
 		describe('#warn()', function(){
@@ -92,6 +113,10 @@ if (Console.support.console && !Console.support.consoleStyles && Console.support
 			it('should work with multiple styled strings', function() {
 				expect(Console.warn(F('foo', 'red,underline') + F('bar', 'blue'))).to.eql(['foobar']);
 			});
+
+			it('should work with JSON', function() {
+				expect(Console.warn(F(JSON.stringify(Mocks.obj), 'json'))).to.eql(Stubs.objNoStyle);
+			});
 		});
 
 		describe('#info()', function(){
@@ -105,6 +130,10 @@ if (Console.support.console && !Console.support.consoleStyles && Console.support
 
 			it('should work with multiple styled strings', function() {
 				expect(Console.info(F('foo', 'red,underline') + F('bar', 'blue'))).to.eql(['foobar']);
+			});
+
+			it('should work with JSON', function() {
+				expect(Console.info(F(JSON.stringify(Mocks.obj), 'json'))).to.eql(Stubs.objNoStyle);
 			});
 		});
 

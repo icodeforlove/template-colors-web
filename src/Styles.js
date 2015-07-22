@@ -80,7 +80,7 @@ Console.styles = (function () {
 				} else if (/null/.test(match)) {
 					style = _null;
 				}
-				return match[style];
+				return format(match, style);
 			});
 		};
 
@@ -104,6 +104,11 @@ Console.styles = (function () {
 	function format (string, names) {
 		if (Console.support.consoleStyles) {
 			names.split(',').forEach(function (name) {
+				if (name === prettyJsonKey) {
+					string = string[prettyJsonKey];
+					return;
+				}
+
 				var style = styles[name];
 
 				if (existingSpanRegExp.test(string)) {
@@ -159,6 +164,7 @@ Console.styles = (function () {
 		attach: attach,
 		format: format,
 		register: register,
-		argumentsToConsoleArguments: argumentsToConsoleArguments
+		argumentsToConsoleArguments: argumentsToConsoleArguments,
+		jsonGetter: prettyJsonKey
 	};
 })();

@@ -296,7 +296,7 @@ if (!Array.prototype.map)
 				} else if (/null/.test(match)) {
 					style = _null;
 				}
-				return match[style];
+				return format(match, style);
 			});
 		};
 
@@ -320,6 +320,11 @@ if (!Array.prototype.map)
 	function format (string, names) {
 		if (Console.support.consoleStyles) {
 			names.split(',').forEach(function (name) {
+				if (name === prettyJsonKey) {
+					string = string[prettyJsonKey];
+					return;
+				}
+
 				var style = styles[name];
 
 				if (existingSpanRegExp.test(string)) {
@@ -375,7 +380,8 @@ if (!Array.prototype.map)
 		attach: attach,
 		format: format,
 		register: register,
-		argumentsToConsoleArguments: argumentsToConsoleArguments
+		argumentsToConsoleArguments: argumentsToConsoleArguments,
+		jsonGetter: prettyJsonKey
 	};
 })();;Console.Stack = function (stack) {
 	this._stackString = stack || new Error().stack || '';
