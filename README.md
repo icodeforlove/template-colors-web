@@ -8,6 +8,11 @@ A sane way to interface with your console and use the latest features.
 
 [![Selenium Test Status](https://saucelabs.com/browser-matrix/consolejs.svg)](https://saucelabs.com/u/consolejs)
 
+## features
+
+* easily add styles to strings in the console output using CSS
+* highlight JSON stringified objects
+
 ## modern usage (Chrome / Firefox / IE >= 9)
 
 modern mode is great if you're fine with overriding console methods, and don't mind additional methods on your String.prototype
@@ -26,12 +31,24 @@ Console.styles.register({
 	blue: 'color:#1795de',
 	green: 'color:green',
 	grey: 'color:grey',
+	
+	// optional (this is the default style, uses default colors)
+	json: {
+		'string': 'green',
+		'number': 'darkorange',
+		'boolean': 'blue',
+		'null': 'magenta',
+		'key': 'red'
+	},
 
 	code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
 });
 
 // Step 3: profit!
 console.log('hello'.red.bold);
+
+var object = {a: 1, b: new Date(), c: "1", d: {a: "{a: 1}"}, e: null, f: false};
+console.log('object: ' + JSON.stringify(object, null, '\t').json);
 ```
 
 ## compatibility usage
@@ -51,10 +68,22 @@ Console.styles.register({
 	blue: 'color:#1795de',
 	green: 'color:green',
 	grey: 'color:grey',
+	
+	// optional (this is the default style, uses default colors)
+	json: {
+		'string': 'green',
+		'number': 'darkorange',
+		'boolean': 'blue',
+		'null': 'magenta',
+		'key': 'red'
+	},
 
 	code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
 });
 
 // Step 3: profit!
 Console.log(F('hello', 'red,bold'));
+
+var object = {a: 1, b: new Date(), c: "1", d: {a: "{a: 1}"}, e: null, f: false};
+Console.log('object: ' + F(JSON.stringify(object, null, '\t'), 'json'));
 ```
