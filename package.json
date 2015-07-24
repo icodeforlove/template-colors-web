@@ -1,6 +1,6 @@
 {
   "name": "console.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "dependencies": {},
   "devDependencies": {
@@ -13,7 +13,8 @@
     "grunt": "^0.4.4",
     "grunt-contrib-concat": "^0.4.0",
     "grunt-contrib-uglify": "^0.4.0",
-    "grunt-contrib-jshint": "^0.10.0"
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-bump": "~0.3.1"
   },
   "scripts": {
     "test": "node opensauce.js"
