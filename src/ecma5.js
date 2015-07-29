@@ -66,9 +66,7 @@ if (!Function.prototype.bind) {
             fToBind = this,
             fNOP    = function() {},
             fBound  = function() {
-                return fToBind.apply(this instanceof fNOP
-                        ? this
-                        : oThis,
+                return fToBind.apply(this instanceof fNOP ? this : oThis,
                     aArgs.concat(Array.prototype.slice.call(arguments)));
             };
 
