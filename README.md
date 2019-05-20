@@ -4,6 +4,8 @@
 
 beautiful color usage within template literals for console.log on the web
 
+['INTERACTIVE DEMO'](http://icodeforlove.github.io/template-colors-web/)
+
 ## install
 
 ```
