@@ -7,7 +7,7 @@ beautiful color usage within template literals for console.log on the web
 ## install
 
 ```
-npm install --save template-colors
+npm install --save template-colors-web
 ```
 
 ## usage
@@ -15,7 +15,7 @@ npm install --save template-colors
 you can compose colored template literals in many ways
 
 ```javascript
-import c from 'template-colors';
+import c from 'template-colors-web';
 
 console.log(c`found ${17}.bold new users`);
 
