@@ -74,3 +74,7 @@ c.define('log', ['rgb(0,0,0)', 'rgbBG(255,255,255)', 'bold', 'underline', 'itali
 c`foo bar`.error
 c`foo bar`.log
 ```
+
+## node CLI
+
+If you would like to use template colors in your command line please check out this repo : **[template-colors](https://github.com/icodeforlove/template-colors)**
