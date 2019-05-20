@@ -1,32 +1,40 @@
 {
-  "name": "console.js",
-  "version": "0.0.2",
-  "description": "",
-  "dependencies": {},
-  "devDependencies": {
-    "mocha-sauce": "git://github.com/pbakaus/mocha-sauce.git",
-    "mocha": "^1.18.2",
-    "props": "^0.3.0",
-    "express": "^3.5.1",
-    "sauce-connect-launcher": "^0.3.3",
-    "colors": "^0.6.2",
-    "grunt": "^0.4.4",
-    "grunt-contrib-concat": "^0.4.0",
-    "grunt-contrib-uglify": "^0.4.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-bump": "~0.3.1"
-  },
+  "name": "template-colors-web",
+  "version": "1.0.0",
+  "description": "beautiful color usage within template literals for console.log on the web",
+  "main": "dist-npm/index.js",
   "scripts": {
-    "test": "node opensauce.js"
+    "test": "npm run build; ./node_modules/.bin/jasmine-node ./spec/*",
+    "build": "./node_modules/.bin/babel ./src/ --out-dir ./dist-npm/; ./node_modules/.bin/webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/icodeforlove/console.js.git"
+    "url": "git://github.com/icodeforlove/template-colors-web.git"
   },
-  "author": "Chad Scira",
+  "author": {
+    "name": "Chad Scira",
+    "email": "chadvscira@gmail.com"
+  },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/icodeforlove/console.js/issues"
+  "dependencies": {
+    "colors": "^1.1.2"
   },
-  "homepage": "https://github.com/icodeforlove/console.js"
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/runtime-corejs2": "^7.0.0",
+    "babel-eslint": "^9.0.0",
+    "babel-loader": "^8.0.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "eslint": "^3.4.0",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-jasmine": "^1.8.1",
+    "jasmine-node": "^1.14.5",
+    "webpack": "4.16.5",
+    "webpack-cli": "^3.1.2",
+    "xmldom": "^0.1.27"
+  }
 }

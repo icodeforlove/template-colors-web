@@ -1,89 +1,74 @@
-# Console.js
+# template-colors-web [![Build Status](https://travis-ci.org/icodeforlove/template-colors-web.png?branch=master)](https://travis-ci.org/icodeforlove/template-colors-web)
 
-A sane way to interface with your console and use the latest features.
+### next generation web console colors!
 
-![console](https://cloud.githubusercontent.com/assets/139784/2598269/2cf8e294-bac3-11e3-8f5e-875cb251839d.gif)
+beautiful color usage within template literals for console.log on the web
 
-## support
+## install
 
-[![Selenium Test Status](https://saucelabs.com/browser-matrix/consolejs.svg)](https://saucelabs.com/u/consolejs)
+```
+npm install --save template-colors
+```
+
+## usage
+
+you can compose colored template literals in many ways
+
+```javascript
+import c from 'template-colors';
+
+console.log(c`found ${17}.bold new users`);
+
+console.log(c`found ${17}.bold new users`.bold.underline.grey);
+
+console.log(c`could not delete ${6}.bold.green users`.underline.red);
+
+console.log(c`user ${'John Doe'}.white.bold ${'logged'}.yellow in at ${new Date()}.white.bold`.grey);
+
+console.log(c`
+          This is ${'a'}.blue.italic
+          ${'multiline'}.black.magentaBG
+          ${'example'}.bold.underline.
+`.grey);
+```
 
 ## features
 
-* easily add styles to strings in the console output using CSS
-* highlight JSON stringified objects
-
-## modern usage (Chrome / Firefox / IE >= 9)
-
-modern mode is great if you're fine with overriding console methods, and don't mind additional methods on your String.prototype
+rgb / rgbBG (may be unsupported by your terminal)
 
 ```javascript
-// Step 1: override console methods and enable String.prototype styles
-Console.attach();
-Console.styles.attach();
-
-// Step 2: register your styles
-Console.styles.register({
-	bold: 'font-weight:bold',
-	underline: 'text-decoration:underline',
-
-	red: 'color:#de4f2a',
-	blue: 'color:#1795de',
-	green: 'color:green',
-	grey: 'color:grey',
-	
-	// optional (this is the default style, uses default colors)
-	json: {
-		'string': 'green',
-		'number': 'darkorange',
-		'boolean': 'blue',
-		'null': 'magenta',
-		'key': 'red'
-	},
-
-	code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
-});
-
-// Step 3: profit!
-console.log('hello'.red.bold);
-
-var object = {a: 1, b: new Date(), c: "1", d: {a: "{a: 1}"}, e: null, f: false};
-console.log('object: ' + JSON.stringify(object, null, '\t').json);
+c`foo bar`.rgb(255,0,0)
+c`foo bar`.rgb(255,0,0).rgbBG(0,0,0)
 ```
 
-## compatibility usage
-
-compatibility mode is useful if you want your logs to work in IE < 9, or you don't want be invasive on the console or String.prototype
+inline style commands
 
 ```javascript
-// Step 1: because we aren't using String.prototype, we make our lives a little easier by creating a shortcut
-window.F = Console.styles.format;
+c`${'foo bar'}.bold.red`
+```
 
-// Step 2: register your styles
-Console.styles.register({
-	bold: 'font-weight:bold',
-	underline: 'text-decoration:underline',
+pre existing styles
 
-	red: 'color:#de4f2a',
-	blue: 'color:#1795de',
-	green: 'color:green',
-	grey: 'color:grey',
-	
-	// optional (this is the default style, uses default colors)
-	json: {
-		'string': 'green',
-		'number': 'darkorange',
-		'boolean': 'blue',
-		'null': 'magenta',
-		'key': 'red'
-	},
+```javascript
+c`${'foo bar'.bold}.red`
+```
 
-	code: 'background: rgb(255, 255, 219); padding: 1px 5px; border: 1px solid rgba(0, 0, 0, 0.1); line-height: 18px; text-decoration:underline;'
-});
+defalt styles to apply to whole string
 
-// Step 3: profit!
-Console.log(F('hello', 'red,bold'));
+```javascript
+c`${'foo'}.red bar`.grey.underline
+```
 
-var object = {a: 1, b: new Date(), c: "1", d: {a: "{a: 1}"}, e: null, f: false};
-Console.log('object: ' + F(JSON.stringify(object, null, '\t'), 'json'));
+full style support
+```javascript
+c`${'foo'}.red bar`.style('font-size: 100px')
+```
+
+custom defined styles
+```javascript
+c.define('error', 'rgb(255,0,0)');
+c.define('log', ['rgb(0,0,0)', 'rgbBG(255,255,255)', 'bold', 'underline', 'italic']);
+
+c`foo bar`.error
+c`foo bar`.log
 ```
