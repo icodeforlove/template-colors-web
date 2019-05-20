@@ -7,7 +7,20 @@
 
 		<script src="https://rawgit2.com/icodeforlove/template-colors-web/master/dist-browser/template-colors.js"></script>
 		<style type="text/css">
-			body {
+			#title {
+				position: absolute;
+				top: 5px;
+				left: 40px;
+				margin: 0;
+			}
+
+			#title > a {
+				font-family: helvetica;
+				color: #333;
+				text-decoration: none;
+			}
+
+			#content {
 				position: absolute;
 				margin: 40px;
 				border: 20px dashed #efefef;
@@ -17,7 +30,7 @@
 				right: 0;
 			}
 
-			body > div {
+			#content > div {
 				position: absolute;
 				left: 0;
 				top: 0;
@@ -30,10 +43,15 @@
 				font-size: 15.3vh;
 				text-align: center;
 			}
+
+			#buttons {
+				position: absolute;
+				right: 40px;
+				top: 10px;
+			}
 		</style>
 		<script>
 			function demo(command, args) {
-				//console.log(`console.${command}(${args});`.bold.grey)
 				console[command](c`${'EXAMPLE COMMAND'.bold.black.style('font-size: 18px')}\n\n${`console.${command}(${args});`.grey}\n\n${'OUTPUT'.bold.black.style('font-size: 18px')}\n\n${eval(args)}`);
 			}
 
@@ -48,10 +66,20 @@
 			demo('log', "c` PLAY WITH IT ${'NOW!!'}.underline `.white.redBG.bold.style('font-size: 24px;')");
 
 		</script>
+
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
 	</head>
 	<body>
-		<div>
-			OPEN YOUR<br />CONSOLE
+		<h2 id="title"><a href="https://github.com/icodeforlove/template-colors-web">template-colors-web</a></h2>
+		<div id="buttons">
+			<a class="github-button" href="https://github.com/icodeforlove" aria-label="Follow @icodeforlove on GitHub">Follow @icodeforlove</a>
+			<a class="github-button" href="https://github.com/icodeforlove/template-colors-web" data-icon="octicon-star" data-show-count="true" aria-label="Star icodeforlove/template-colors-web on GitHub">Star</a>
+			<a class="github-button" href="https://github.com/icodeforlove/template-colors-web/archive/master.zip" data-icon="octicon-cloud-download" aria-label="Download icodeforlove/template-colors-web on GitHub">Download</a>
+		</div>
+		<div id="content">
+			<div>
+				OPEN YOUR<br />CONSOLE
+			</div>
 		</div>
 	</body>
 </html>
