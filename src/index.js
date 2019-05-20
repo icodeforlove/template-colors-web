@@ -35,6 +35,4 @@ colors.define('strikethrough', 'style("text-decoration: line-through")');
 colors.define('dim', 'style("opacity: 0.75")');
 colors.define('hidden', 'style("opacity: 0.00")');
 
-//console.log(colors`${'test'}.underline.green.italic.style('font-size: 42px').bold`);
-
 module.exports = colors;

@@ -27,12 +27,7 @@ class StyledStringPlain {
 
 }
 
-try {
-  String.prototype.rgb = StyledStringPlain.prototype.rgb;
-  String.prototype.rgbBG = StyledStringPlain.prototype.rgbBG;
-  String.prototype.style = StyledStringPlain.prototype.style;
-} catch (error) {
-  console.log(error);
-}
-
+String.prototype.rgb = StyledStringPlain.prototype.rgb;
+String.prototype.rgbBG = StyledStringPlain.prototype.rgbBG;
+String.prototype.style = StyledStringPlain.prototype.style;
 module.exports = StyledStringPlain;
